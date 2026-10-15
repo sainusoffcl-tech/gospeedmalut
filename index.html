@@ -3,146 +3,772 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#075985">
-  <title>GoSpeedMalut - Tiket Speedboat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#063b66">
+  <meta name="description" content="Prototype pemesanan tiket speedboat GoSpeedMalut.">
+  <title>GoSpeedMalut — Tiket Speedboat</title>
+
   <style>
+    :root {
+      --navy: #063b66;
+      --blue: #087fbd;
+      --cyan: #43d5e9;
+      --pale: #eaf7ff;
+      --ink: #17334b;
+      --muted: #6b8295;
+      --white: #fff;
+      --line: #dce9f2;
+      --green: #13795b;
+      --shadow: 0 12px 32px rgba(6, 59, 102, .09);
+    }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      color: #12304a;
-      background: #f0f9ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Arial, sans-serif;
+      color: var(--ink);
+      background: #f5faff;
+      line-height: 1.5;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .wrap {
+      width: min(100% - 32px, 1000px);
+      margin: auto;
     }
 
     header {
-      padding: 22px 18px;
       color: white;
-      background: #075985;
+      background: var(--navy);
     }
 
-    header h1 { margin: 0 0 6px; }
-    header p { margin: 0; }
-
-    main {
-      width: min(100% - 28px, 600px);
-      margin: 24px auto;
+    .nav {
+      min-height: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
-    .panel {
-      padding: 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 18px #0c4a6e12;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      text-decoration: none;
     }
 
-    label {
+    .logo {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.13);
+      font-size: 25px;
+    }
+
+    .brand strong {
       display: block;
-      margin: 14px 0 6px;
-      font-weight: bold;
+      font-size: 19px;
+      letter-spacing: -.5px;
     }
 
-    input, select, button {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 9px;
-      font-size: 16px;
+    .brand small {
+      color: #b8e8ff;
+      font-size: 11px;
     }
 
-    button {
-      margin-top: 20px;
-      border: 0;
+    .nav-tag {
+      border: 1px solid rgba(255,255,255,.3);
+      border-radius: 30px;
+      padding: 7px 10px;
+      font-size: 11px;
+      color: #e0f5ff;
+    }
+
+    .hero {
+      overflow: hidden;
+      position: relative;
+      padding: 40px 0 54px;
       color: white;
-      background: #0284c7;
-      font-weight: bold;
-      cursor: pointer;
+      background:
+        radial-gradient(ellipse at 90% 10%, #1596c8 0, transparent 35%),
+        linear-gradient(135deg, #063b66, #087eae);
     }
 
-    #hasil {
-      margin-top: 16px;
-      line-height: 1.6;
+    .hero h1 {
+      margin: 0;
+      max-width: 650px;
+      font-size: clamp(29px, 6vw, 48px);
+      line-height: 1.12;
+      letter-spacing: -1.5px;
     }
+
+    .hero h1 span { color: #7ceafa; }
+
+    .hero p {
+      max-width: 460px;
+      margin: 15px 0 24px;
+      color: #d7f0ff;
+      font-size: 15px;
+    }
+
+    .hero-art {
+      position: absolute;
+      right: 4%;
+      bottom: 22px;
+      opacity: .16;
+      font-size: clamp(90px, 18vw, 180px);
+      transform: rotate(-7deg);
+      pointer-events: none;
+    }
+
+    .search-card {
+      position: relative;
+      z-index: 1;
+      margin-top: -25px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 16px;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4c6579;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      min-width: 0;
+      min-height: 47px;
+      padding: 11px;
+      border: 1px solid #d7e4ee;
+      border-radius: 10px;
+      outline: none;
+      background: #fbfdff;
+      color: var(--ink);
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px #087fbd18;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 49px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 11px;
+      color: white;
+      background: var(--blue);
+      font-weight: 750;
+      transition: background .2s;
+    }
+
+    .primary:hover { background: var(--navy); }
+
+    .search-button { margin-top: 17px; }
+
+    main { padding-bottom: 36px; }
+
+    .notice {
+      margin: 20px 0;
+      padding: 12px 14px;
+      border: 1px solid #f3dba2;
+      border-radius: 12px;
+      background: #fff9e9;
+      color: #795516;
+      font-size: 12px;
+    }
+
+    .section { margin-top: 30px; }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -.5px;
+    }
+
+    .section-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .count {
+      padding: 6px 10px;
+      border-radius: 20px;
+      background: #dff5ff;
+      color: #075985;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .trips {
+      display: grid;
+      gap: 14px;
+    }
+
+    .trip {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: white;
+      box-shadow: 0 5px 16px rgba(6,59,102,.035);
+    }
+
+    .trip-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 12px;
+    }
+
+    .boat-name { font-weight: 750; font-size: 16px; }
+    .boat-type { color: var(--muted); font-size: 12px; }
+
+    .sim-badge {
+      padding: 5px 8px;
+      border-radius: 8px;
+      color: #795516;
+      background: #fff3d5;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: 1fr 42px 1fr;
+      align-items: center;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .route strong { display: block; font-size: 18px; }
+    .route small { color: var(--muted); font-size: 11px; }
+
+    .route-end:last-child { text-align: right; }
+
+    .route-line {
+      position: relative;
+      border-top: 2px dashed #8acfe8;
+    }
+
+    .route-line:after {
+      content: "›";
+      position: absolute;
+      top: -17px;
+      right: -2px;
+      color: var(--blue);
+      font-size: 25px;
+    }
+
+    .trip-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid #edf2f6;
+    }
+
+    .price small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .price strong { color: var(--navy); font-size: 19px; }
+
+    .choose {
+      padding: 11px 17px;
+      border: 0;
+      border-radius: 10px;
+      color: white;
+      background: var(--navy);
+      font-weight: 700;
+    }
+
+    .choose:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .empty {
+      padding: 24px;
+      border: 1px dashed #b8d5e6;
+      border-radius: 15px;
+      text-align: center;
+      color: var(--muted);
+      background: white;
+    }
+
+    .booking {
+      margin-top: 30px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .booking h2 { margin: 0 0 6px; font-size: 22px; }
+    .booking > p { margin: 0 0 20px; color: var(--muted); font-size: 13px; }
+
+    .booking-summary {
+      margin-bottom: 18px;
+      padding: 13px;
+      border-radius: 11px;
+      background: var(--pale);
+      font-size: 13px;
+    }
+
+    .full-field { margin-top: 14px; }
+
+    .success {
+      margin-top: 16px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #e8f8ef;
+      color: var(--green);
+      overflow-wrap: anywhere;
+      font-size: 13px;
+    }
+
+    .hidden { display: none !important; }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .feature {
+      padding: 15px 9px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      text-align: center;
+      background: white;
+    }
+
+    .feature span { display: block; font-size: 25px; }
+    .feature strong { display: block; margin-top: 6px; font-size: 12px; }
+    .feature small { color: var(--muted); font-size: 10px; }
 
     footer {
-      padding: 20px;
+      margin-top: 30px;
+      padding: 26px 0;
+      color: #d5eafa;
+      background: var(--navy);
       text-align: center;
-      color: #64748b;
-      font-size: 13px;
+      font-size: 12px;
+    }
+
+    footer strong { color: white; }
+    footer p { margin: 6px 0; }
+
+    @media (min-width: 700px) {
+      .form-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .trips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero { padding: 58px 0 70px; }
+      .search-card { padding: 27px; }
+      .booking { padding: 28px; }
+    }
+
+    @media (max-width: 390px) {
+      .wrap { width: min(100% - 22px, 1000px); }
+      .search-card, .booking { padding: 16px; }
+      .form-grid { gap: 12px; }
+      .route strong { font-size: 16px; }
+      .nav-tag { font-size: 10px; }
     }
   </style>
 </head>
+
 <body>
   <header>
-    <h1>🚤 GoSpeedMalut</h1>
-    <p>Mudah, Cepat, Sampai Tujuan</p>
+    <div class="wrap nav">
+      <a class="brand" href="#" aria-label="GoSpeedMalut beranda">
+        <div class="logo">🚤</div>
+        <div>
+          <strong>GoSpeedMalut</strong>
+          <small>Jelajahi Maluku Utara</small>
+        </div>
+      </a>
+      <span class="nav-tag">PROTOTYPE v2</span>
+    </div>
   </header>
 
-  <main>
-    <section class="panel">
-      <h2>Cari Perjalanan</h2>
-      <p>Jelajahi Maluku Utara dengan lebih mudah.</p>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Perjalanan laut lebih <span>mudah.</span></h1>
+      <p>
+        Cari perjalanan speedboat, pilih jadwal,
+        dan rencanakan perjalananmu bersama GoSpeedMalut.
+      </p>
+    </div>
+    <div class="hero-art" aria-hidden="true">🌊</div>
+  </section>
 
-      <form id="formCari">
-        <label for="asal">Pelabuhan asal</label>
-        <select id="asal" required>
-          <option value="">Pilih pelabuhan asal</option>
-          <option>Ternate</option>
-          <option>Tidore</option>
-          <option>Sofifi</option>
-          <option>Bacan</option>
-        </select>
+  <main class="wrap">
+    <section class="search-card" id="pencarian">
+      <h2 class="section-label">🔎 Cari Perjalanan</h2>
 
-        <label for="tujuan">Pelabuhan tujuan</label>
-        <select id="tujuan" required>
-          <option value="">Pilih pelabuhan tujuan</option>
-          <option>Ternate</option>
-          <option>Tidore</option>
-          <option>Sofifi</option>
-          <option>Bacan</option>
-        </select>
+      <form id="searchForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="asal">Pelabuhan asal</label>
+            <select id="asal" required>
+              <option value="Ternate">Ternate</option>
+              <option value="Tidore">Tidore</option>
+              <option value="Sofifi">Sofifi</option>
+              <option value="Bacan">Bacan</option>
+            </select>
+          </div>
 
-        <label for="tanggal">Tanggal keberangkatan</label>
-        <input id="tanggal" type="date" required>
+          <div class="field">
+            <label for="tujuan">Pelabuhan tujuan</label>
+            <select id="tujuan" required>
+              <option value="Tidore">Tidore</option>
+              <option value="Ternate">Ternate</option>
+              <option value="Sofifi">Sofifi</option>
+              <option value="Bacan">Bacan</option>
+            </select>
+          </div>
 
-        <label for="penumpang">Jumlah penumpang</label>
-        <input id="penumpang" type="number"
-          min="1" max="20" value="1" required>
+          <div class="field">
+            <label for="tanggal">Tanggal berangkat</label>
+            <input id="tanggal" type="date" required>
+          </div>
 
-        <button type="submit">Cari Jadwal</button>
+          <div class="field">
+            <label for="penumpang">Jumlah penumpang</label>
+            <select id="penumpang">
+              <option value="1">1 penumpang</option>
+              <option value="2">2 penumpang</option>
+              <option value="3">3 penumpang</option>
+              <option value="4">4 penumpang</option>
+              <option value="5">5 penumpang</option>
+              <option value="6">6 penumpang</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="primary search-button" type="submit">
+          Cari Jadwal Speedboat →
+        </button>
+      </form>
+    </section>
+
+    <div class="notice">
+      ⚠️ <strong>Mode demonstrasi.</strong>
+      Jadwal, armada, harga, dan ketersediaan di halaman ini
+      adalah data contoh, bukan penawaran perjalanan nyata.
+      Jangan gunakan untuk melakukan pembayaran.
+    </div>
+
+    <section class="section" id="hasil">
+      <div class="section-head">
+        <div>
+          <h2>Jadwal Perjalanan</h2>
+          <p id="routeDescription">Contoh pilihan perjalanan</p>
+        </div>
+        <span class="count" id="tripCount">3 pilihan</span>
+      </div>
+      <div class="trips" id="tripList"></div>
+    </section>
+
+    <section class="booking hidden" id="booking">
+      <h2>Data Penumpang</h2>
+      <p>Isi data contoh untuk mencoba alur pemesanan.</p>
+
+      <div class="booking-summary" id="bookingSummary"></div>
+
+      <form id="bookingForm">
+        <div class="field">
+          <label for="nama">Nama lengkap</label>
+          <input id="nama" type="text" maxlength="100"
+            autocomplete="name" placeholder="Masukkan nama lengkap" required>
+        </div>
+
+        <div class="field full-field">
+          <label for="identitas">Nomor identitas (simulasi)</label>
+          <input id="identitas" type="text" maxlength="30"
+            placeholder="Masukkan nomor identitas" required>
+        </div>
+
+        <div class="field full-field">
+          <label for="kontak">Nomor WhatsApp (simulasi)</label>
+          <input id="kontak" type="tel" maxlength="20"
+            autocomplete="tel" placeholder="Contoh: 08xxxxxxxxxx" required>
+        </div>
+
+        <button class="primary" type="submit" style="margin-top:20px">
+          Buat Ringkasan Pemesanan
+        </button>
       </form>
 
-      <div id="hasil" aria-live="polite"></div>
+      <div id="bookingResult" aria-live="polite"></div>
+    </section>
+
+    <section class="features">
+      <div class="feature">
+        <span>🗓️</span>
+        <strong>Pilih Jadwal</strong>
+        <small>Rencana perjalanan</small>
+      </div>
+      <div class="feature">
+        <span>🛥️</span>
+        <strong>Pilih Armada</strong>
+        <small>Bandingkan pilihan</small>
+      </div>
+      <div class="feature">
+        <span>🎫</span>
+        <strong>Tiket Digital</strong>
+        <small>Fitur pengembangan</small>
+      </div>
     </section>
   </main>
 
   <footer>
-    © 2026 GoSpeedMalut · Prototype awal
+    <div class="wrap">
+      <strong>🚤 GoSpeedMalut</strong>
+      <p>Mudah, Cepat, Sampai Tujuan.</p>
+      <p>© 2026 GoSpeedMalut · Prototype demonstrasi</p>
+    </div>
   </footer>
 
   <script>
-    document.getElementById("formCari")
-      .addEventListener("submit", function(event) {
-        event.preventDefault();
+    const trips = [
+      {
+        id: "A",
+        boat: "Speedboat Express",
+        type: "Armada contoh · Kelas reguler",
+        depart: "08.00",
+        arrive: "08.30",
+        price: 75000,
+        seats: 12
+      },
+      {
+        id: "B",
+        boat: "Malut Bahari",
+        type: "Armada contoh · Kelas reguler",
+        depart: "10.00",
+        arrive: "10.35",
+        price: 85000,
+        seats: 8
+      },
+      {
+        id: "C",
+        boat: "Samudra Cepat",
+        type: "Armada contoh · Kelas nyaman",
+        depart: "13.00",
+        arrive: "13.30",
+        price: 100000,
+        seats: 6
+      }
+    ];
 
-        const asal = document.getElementById("asal").value;
-        const tujuan = document.getElementById("tujuan").value;
-        const tanggal = document.getElementById("tanggal").value;
-        const penumpang = document.getElementById("penumpang").value;
-        const hasil = document.getElementById("hasil");
+    const $ = id => document.getElementById(id);
+    let selectedTrip = null;
+    let currentSearch = null;
 
-        if (asal === tujuan) {
-          hasil.textContent =
-            "Pelabuhan asal dan tujuan harus berbeda.";
-          return;
-        }
+    const rupiah = amount => new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0
+    }).format(amount);
 
-        hasil.textContent =
-          "Pencarian prototype: " + asal + " ke " + tujuan +
-          ", tanggal " + tanggal + ", " +
-          penumpang + " penumpang. Jadwal nyata belum terhubung.";
+    const today = new Date();
+    const localDate = new Date(
+      today.getTime() - today.getTimezoneOffset() * 60000
+    ).toISOString().slice(0, 10);
+
+    $("tanggal").min = localDate;
+    $("tanggal").value = localDate;
+
+    function renderTrips() {
+      const { asal, tujuan, tanggal, penumpang } = currentSearch;
+
+      $("routeDescription").textContent =
+        `${asal} → ${tujuan} · ${tanggal} · ${penumpang} penumpang`;
+
+      $("tripCount").textContent = `${trips.length} pilihan`;
+
+      $("tripList").innerHTML = trips.map(trip => `
+        <article class="trip">
+          <div class="trip-top">
+            <div>
+              <div class="boat-name">${trip.boat}</div>
+              <div class="boat-type">${trip.type}</div>
+            </div>
+            <span class="sim-badge">SIMULASI</span>
+          </div>
+
+          <div class="route">
+            <div class="route-end">
+              <strong>${trip.depart}</strong>
+              <small>${asal}</small>
+            </div>
+            <div class="route-line"></div>
+            <div class="route-end">
+              <strong>${trip.arrive}</strong>
+              <small>${tujuan}</small>
+            </div>
+          </div>
+
+          <div class="trip-bottom">
+            <div class="price">
+              <small>Contoh harga / orang</small>
+              <strong>${rupiah(trip.price)}</strong>
+              <small>${trip.seats} kursi contoh</small>
+            </div>
+            <button class="choose" type="button"
+              data-trip="${trip.id}">
+              Pilih
+            </button>
+          </div>
+        </article>
+      `).join("");
+
+      $("booking").classList.add("hidden");
+      $("bookingResult").replaceChildren();
+      selectedTrip = null;
+
+      $("tripList").querySelectorAll("[data-trip]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedTrip = trips.find(
+            trip => trip.id === button.dataset.trip
+          );
+
+          const total = selectedTrip.price * Number(penumpang);
+
+          $("bookingSummary").textContent =
+            `${selectedTrip.boat} · ${asal} ke ${tujuan} · ` +
+            `${selectedTrip.depart} · ${penumpang} penumpang · ` +
+            `Total simulasi ${rupiah(total)}`;
+
+          $("booking").classList.remove("hidden");
+          $("booking").scrollIntoView({ behavior: "smooth" });
+        });
       });
+    }
+
+    $("searchForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const asal = $("asal").value;
+      const tujuan = $("tujuan").value;
+      const tanggal = $("tanggal").value;
+
+      if (asal === tujuan) {
+        alert("Pelabuhan asal dan tujuan harus berbeda.");
+        return;
+      }
+
+      if (!tanggal || tanggal < localDate) {
+        alert("Pilih tanggal hari ini atau tanggal berikutnya.");
+        return;
+      }
+
+      currentSearch = {
+        asal,
+        tujuan,
+        tanggal,
+        penumpang: Number($("penumpang").value)
+      };
+
+      renderTrips();
+      $("hasil").scrollIntoView({ behavior: "smooth" });
+    });
+
+    $("bookingForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!selectedTrip || !currentSearch) return;
+
+      const nama = $("nama").value.trim();
+      const identitas = $("identitas").value.trim();
+      const kontak = $("kontak").value.trim();
+
+      if (!nama || !identitas || !kontak) {
+        alert("Lengkapi semua data terlebih dahulu.");
+        return;
+      }
+
+      const total = selectedTrip.price * currentSearch.penumpang;
+
+      const result = document.createElement("div");
+      result.className = "success";
+
+      const heading = document.createElement("strong");
+      heading.textContent = "✓ Ringkasan simulasi berhasil dibuat";
+
+      const details = document.createElement("p");
+      details.textContent =
+        `Penumpang: ${nama}. Perjalanan: ${currentSearch.asal} ` +
+        `ke ${currentSearch.tujuan}. Armada: ${selectedTrip.boat}. ` +
+        `Tanggal: ${currentSearch.tanggal}. ` +
+        `Jumlah: ${currentSearch.penumpang} penumpang. ` +
+        `Total contoh: ${rupiah(total)}.`;
+
+      const warning = document.createElement("p");
+      warning.textContent =
+        "Ini hanya simulasi di browser. Data tidak dikirim ke server, " +
+        "tidak disimpan sebagai pemesanan, dan tidak ada tiket atau " +
+        "pembayaran yang diterbitkan.";
+
+      result.append(heading, details, warning);
+      $("bookingResult").replaceChildren(result);
+      result.scrollIntoView({ behavior: "smooth" });
+    });
+
+    currentSearch = {
+      asal: $("asal").value,
+      tujuan: $("tujuan").value,
+      tanggal: $("tanggal").value,
+      penumpang: Number($("penumpang").value)
+    };
+
+    renderTrips();
   </script>
 </body>
 </html>
