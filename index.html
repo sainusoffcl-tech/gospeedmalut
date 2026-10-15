@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#075985">
+  <title>GoSpeedMalut - Tiket Speedboat</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #12304a;
+      background: #f0f9ff;
+    }
+
+    header {
+      padding: 22px 18px;
+      color: white;
+      background: #075985;
+    }
+
+    header h1 { margin: 0 0 6px; }
+    header p { margin: 0; }
+
+    main {
+      width: min(100% - 28px, 600px);
+      margin: 24px auto;
+    }
+
+    .panel {
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 18px #0c4a6e12;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 16px;
+    }
+
+    button {
+      margin-top: 20px;
+      border: 0;
+      color: white;
+      background: #0284c7;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #hasil {
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 20px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚤 GoSpeedMalut</h1>
+    <p>Mudah, Cepat, Sampai Tujuan</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Cari Perjalanan</h2>
+      <p>Jelajahi Maluku Utara dengan lebih mudah.</p>
+
+      <form id="formCari">
+        <label for="asal">Pelabuhan asal</label>
+        <select id="asal" required>
+          <option value="">Pilih pelabuhan asal</option>
+          <option>Ternate</option>
+          <option>Tidore</option>
+          <option>Sofifi</option>
+          <option>Bacan</option>
+        </select>
+
+        <label for="tujuan">Pelabuhan tujuan</label>
+        <select id="tujuan" required>
+          <option value="">Pilih pelabuhan tujuan</option>
+          <option>Ternate</option>
+          <option>Tidore</option>
+          <option>Sofifi</option>
+          <option>Bacan</option>
+        </select>
+
+        <label for="tanggal">Tanggal keberangkatan</label>
+        <input id="tanggal" type="date" required>
+
+        <label for="penumpang">Jumlah penumpang</label>
+        <input id="penumpang" type="number"
+          min="1" max="20" value="1" required>
+
+        <button type="submit">Cari Jadwal</button>
+      </form>
+
+      <div id="hasil" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 GoSpeedMalut · Prototype awal
+  </footer>
+
+  <script>
+    document.getElementById("formCari")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const asal = document.getElementById("asal").value;
+        const tujuan = document.getElementById("tujuan").value;
+        const tanggal = document.getElementById("tanggal").value;
+        const penumpang = document.getElementById("penumpang").value;
+        const hasil = document.getElementById("hasil");
+
+        if (asal === tujuan) {
+          hasil.textContent =
+            "Pelabuhan asal dan tujuan harus berbeda.";
+          return;
+        }
+
+        hasil.textContent =
+          "Pencarian prototype: " + asal + " ke " + tujuan +
+          ", tanggal " + tanggal + ", " +
+          penumpang + " penumpang. Jadwal nyata belum terhubung.";
+      });
+  </script>
+</body>
+</html>
