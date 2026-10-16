@@ -770,5 +770,36 @@
 
     renderTrips();
   </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "TEMPEL_PROJECT_URL_KAMU";
+  const SUPABASE_KEY = "TEMPEL_PUBLISHABLE_KEY_KAMU";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  async function cekKoneksiSupabase() {
+    const { data, error } = await supabaseClient
+      .from("jadwal")
+      .select("id, status")
+      .eq("status", "Aktif")
+      .limit(5);
+
+    if (error) {
+      console.error("Koneksi Supabase gagal:", error.message);
+      return;
+    }
+
+    console.log("Koneksi Supabase berhasil!");
+    console.log("Jadwal aktif dari database:", data);
+  }
+
+  cekKoneksiSupabase();
+</script>
+
 </body>
 </html>
