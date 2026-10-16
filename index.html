@@ -782,23 +782,37 @@
     SUPABASE_KEY
   );
 
-  async function cekKoneksiSupabase() {
-    const { data, error } = await supabaseClient
-      .from("jadwal")
-      .select("id, status")
-      .eq("status", "Aktif")
-      .limit(5);
+  
+async function cekKoneksiSupabase() {
+  let pesan = document.getElementById("status-supabase");
 
-    if (error) {
-      console.error("Koneksi Supabase gagal:", error.message);
-      return;
-    }
-
-    console.log("Koneksi Supabase berhasil!");
-    console.log("Jadwal aktif dari database:", data);
+  if (!pesan) {
+    pesan = document.createElement("p");
+    pesan.id = "status-supabase";
+    pesan.style.cssText =
+      "padding:12px;margin:16px;border-radius:8px;background:#e8f4ff;color:#123b5d;text-align:center;";
+    document.body.prepend(pesan);
   }
 
-  cekKoneksiSupabase();
+  pesan.textContent = "Sedang menguji koneksi Supabase...";
+
+  const { data, error } = await supabaseClient
+    .from("jadwal")
+    .select("id, status")
+    .eq("status", "Aktif")
+    .limit(5);
+
+  if (error) {
+    pesan.textContent =
+      "Koneksi gagal: " + error.message;
+    return;
+  }
+
+  pesan.textContent =
+    "Koneksi Supabase berhasil! Jadwal aktif ditemukan: " +
+    data.length;
+}
+
 </script>
 
 </body>
